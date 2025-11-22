@@ -28,10 +28,6 @@ GLOBAL_PROTECT(poll_options)
 // All religion stuff
 GLOBAL_VAR(religion)
 GLOBAL_VAR(deity)
-
-// Nobility verb cooldowns
-GLOBAL_VAR(disgrace_knight_cooldown)
-GLOBAL_VAR(fire_guard_cooldown)
 GLOBAL_VAR(bible_name)
 GLOBAL_VAR(bible_icon_state)
 GLOBAL_VAR(bible_item_state)

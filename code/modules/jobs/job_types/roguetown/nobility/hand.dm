@@ -1,3 +1,6 @@
+#define DISGRACE_KNIGHT_COOLDOWN (30 SECONDS)
+#define FIRE_GUARD_COOLDOWN (30 SECONDS)
+
 /datum/job/roguetown/hand
 	title = "Hand"
 	flag = HAND
@@ -72,18 +75,14 @@
 	if(stat)
 		return
 
-	if(GLOB.disgrace_knight_cooldown > world.time)
+	static/disgrace_cooldown = 0
+	if(disgrace_cooldown > world.time)
 		to_chat(src, span_warning("I need to wait before disgracing another knight again."))
-		return FALSE
-
-	// Check if user is Duke or Hand
-	if(!(job == "Grand Duke" || job == "Grand Duchess" || job == "Hand"))
-		to_chat(src, span_warning("Only the Grand Duke or Hand may disgrace a knight."))
 		return FALSE
 
 	// Must be in the throne room
 	if(!istype(get_area(src), /area/rogue/indoors/town/manor))
-		to_chat(src, span_warning("I need to do this from the throne room."))
+		to_chat(src, span_warning("I need to do this from the keep's manor."))
 		return FALSE
 
 	var/inputty = input("Disgrace or restore a knight's honor. Enter their name:", "Knight Honor") as text|null
@@ -108,7 +107,7 @@
 		to_chat(src, span_warning("[target.real_name] is not a knight."))
 		return FALSE
 
-	GLOB.disgrace_knight_cooldown = world.time + 30 SECONDS
+	disgrace_cooldown = world.time + DISGRACE_KNIGHT_COOLDOWN
 
 	// If already disgraced, restore their honor
 	if(HAS_TRAIT(target, TRAIT_DISGRACED_KNIGHT))
@@ -142,16 +141,12 @@
 	if(stat)
 		return
 
-	if(GLOB.fire_guard_cooldown > world.time)
+	static/fire_cooldown = 0
+	if(fire_cooldown > world.time)
 		to_chat(src, span_warning("I need to wait before firing another guard again."))
 		return FALSE
 
-	// Check if user is Duke, Hand, or Marshal
-	if(!(job == "Grand Duke" || job == "Grand Duchess" || job == "Hand" || job == "Marshal"))
-		to_chat(src, span_warning("Only the Grand Duke, Hand, or Marshal may fire a guard."))
-		return FALSE
-
-	var/inputty = input("Fire a guard from service. Enter their name:", "Fire Guard") as text|null
+	var/inputty = input("Fire a guard from service. They cannot be re-hired. Enter their name:", "Fire Guard") as text|null
 	if(!inputty)
 		return
 
@@ -177,7 +172,7 @@
 		to_chat(src, span_warning("[target.real_name] is not currently serving as a guard."))
 		return FALSE
 
-	GLOB.fire_guard_cooldown = world.time + 30 SECONDS
+	fire_cooldown = world.time + FIRE_GUARD_COOLDOWN
 
 	// Fire them - remove guard trait and change job to Towner
 	REMOVE_TRAIT(target, TRAIT_GUARDSMAN, JOB_TRAIT)
