@@ -434,7 +434,7 @@
 				user.say("I call to the ruthless wilds,")
 				playsound(loc, 'sound/vo/mobs/spider/idle (1).ogg', 100, FALSE, -1)
 				if(do_after(user, 50))
-					user.say("Grant me form to traverse...")
+					user.say("... grant me an agile form of your dominion..!")
 					playsound(loc, 'sound/vo/mobs/spider/idle (3).ogg', 100, FALSE, -1)
 					if(do_after(user, 30))
 						icon_state = "dendor_active"
