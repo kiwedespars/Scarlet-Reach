@@ -23,7 +23,13 @@
 		"ASTRATA BRINGS LAW!",
 		"I SERVE THE GLORY OF THE SUN!",
 	)
+	miracle_healing_lines = list(
+		"A wreath of gentle light passes over %TARGET!"
+	)
 	storyteller = /datum/storyteller/astrata
+
+/datum/patron/divine/astrata/situational_bonus(mob/living/follower, mob/living/target)
+	return list((GLOB.tod == "day"), 2)
 
 /datum/patron/divine/noc
 	name = "Noc"
@@ -46,7 +52,13 @@
 		"NOC SEES ALL!",
 		"I SEEK THE MYSTERIES OF THE MOON!",
 	)
+	miracle_healing_lines = list(
+		"A shroud of soft moonlight falls upon %TARGET!"
+	)
 	storyteller = /datum/storyteller/noc
+
+/datum/patron/divine/noc/situational_bonus(mob/living/follower, mob/living/target)
+	return list((GLOB.tod == "night"), 2)
 
 /datum/patron/divine/dendor
 	name = "Dendor"
@@ -71,7 +83,21 @@
 		"THE TREEFATHER BRINGS BOUNTY!",
 		"I ANSWER THE CALL OF THE WILD!",
 	)
+	miracle_healing_lines = list(
+		"A rush of primal energy spirals about %TARGET!"
+	)
 	storyteller = /datum/storyteller/dendor
+
+/datum/patron/divine/dendor/situational_bonus(mob/living/follower, mob/living/target)
+	var/list/natural_stuff = list(/obj/structure/flora/roguegrass, /obj/structure/flora/roguetree, /obj/structure/flora/rogueshroom, /obj/structure/soil, /obj/structure/flora/newtree, /obj/structure/flora/tree, /obj/structure/glowshroom)
+	var/situational_bonus = 0
+	// the more natural stuff around US, the more we heal
+	for (var/obj/O in oview(5, follower))
+		if (O in natural_stuff)
+			situational_bonus = min(situational_bonus + 0.1, 2)
+	for (var/obj/structure/flora/roguetree/wise/O in oview(5, follower))
+		situational_bonus += 1.5
+	return list((situational_bonus > 0), situational_bonus)
 
 /datum/patron/divine/abyssor
 	name = "Abyssor"
@@ -96,8 +122,15 @@
 		"THE OCEAN'S FURY IS ABYSSOR'S WILL!",
 		"I AM DRAWN BY THE PULL OF THE TIDE!",
 	)
+	miracle_healing_lines = list(
+		"A mist of salt-scented vapour settles on %TARGET!"
+	)
 
 	storyteller = /datum/storyteller/abyssor
+
+/datum/patron/divine/abyssor/situational_bonus(mob/living/follower, mob/living/target)
+	// if we're standing in water
+	return list((istype(get_turf(follower), /turf/open/water)), 1.5)
 
 /datum/patron/divine/ravox
 	name = "Ravox"
@@ -119,7 +152,17 @@
 		"THROUGH STRIFE, GRACE!",
 		"THROUGH PERSISTENCE, GLORY!",
 	)
+	miracle_healing_lines = list(
+		"An air of righteous defiance rises near %TARGET!"
+	)
 	storyteller = /datum/storyteller/ravox
+
+/datum/patron/divine/ravox/situational_bonus(mob/living/follower, mob/living/target)
+	var/situational_bonus = 0
+	// the bloodier the area around our target is, the more we heal
+	for (var/obj/effect/decal/cleanable/blood/O in oview(5, follower))
+		situational_bonus = min(situational_bonus + 0.1, 2)
+	return list((situational_bonus > 0), situational_bonus)
 
 /datum/patron/divine/necra
 	name = "Necra"
@@ -143,7 +186,14 @@
 		"THE UNDERMAIDEN IS OUR FINAL REPOSE!",
 		"I FEAR NOT DEATH, MY LADY AWAITS ME!",
 	)
+	miracle_healing_lines = list(
+		"A sense of quiet respite radiates from %TARGET."
+	)
 	storyteller = /datum/storyteller/necra
+
+/datum/patron/divine/necra/situational_bonus(mob/living/follower, mob/living/target)
+	// if the target is closer to death
+	return list((target.health <= target.maxHealth * 0.25), 2.5)
 
 /datum/patron/divine/xylix
 	name = "Xylix"
@@ -177,7 +227,14 @@
 		"BAOTHA IS MY JOY!",
 		"REBUKE THE HERETICAL- PSYDON ENDURES!",
 	)
+	miracle_healing_lines = list(
+		"A mirthful breeze swirls around %TARGET!"
+	)
 	storyteller = /datum/storyteller/xylix
+
+/datum/patron/divine/xylix/situational_bonus(mob/living/follower, mob/living/target)
+	// half of the time, heal a little (or a lot) more - flip the coin
+	return list(prob(50), rand(1, 2.5))
 
 /datum/patron/divine/pestra
 	name = "Pestra"
@@ -201,7 +258,18 @@
 		"DECAY IS A CONTINUATION OF LIFE!",
 		"MY AFFLICTION IS MY TESTAMENT!",
 	)
+	miracle_healing_lines = list(
+		"An aura of clinical care encompasses %TARGET!"
+	)
 	storyteller = /datum/storyteller/pestra
+
+/datum/patron/divine/pestra/situational_bonus(mob/living/follower, mob/living/target)
+	if (!iscarbon(follower))
+		return list(FALSE, 0)
+
+	// situational bonus only if whatever we're healing is low on blood
+	var/mob/living/carbon/C = target
+	return list((C.blood_volume <= (BLOOD_VOLUME_NORMAL / 2)), 2.5)
 
 /datum/patron/divine/malum
 	name = "Malum"
@@ -224,9 +292,19 @@
 		"TRUE VALUE IS IN THE TOIL!",
 		"I AM AN INSTRUMENT OF CREATION!",
 	)
-
+	miracle_healing_lines = list(
+		"A dispassionate glow smoulders around %TARGET!"
+	)
 	storyteller = /datum/storyteller/malum
 
+/datum/patron/divine/malum/situational_bonus(mob/living/follower, mob/living/target)
+	// extra healing for every source of fire/light near us
+	var/list/firey_stuff = list(/obj/machinery/light/rogue/torchholder, /obj/machinery/light/rogue/campfire, /obj/machinery/light/rogue/hearth, /obj/machinery/light/rogue/wallfire, /obj/machinery/light/rogue/wallfire/candle, /obj/machinery/light/rogue/forge)
+	var/situational_bonus = 0
+	for (var/obj/O in oview(5, follower))
+		if (O.type in firey_stuff)
+			situational_bonus = min(situational_bonus + 0.5, 2.5)
+	return list((situational_bonus > 0), situational_bonus)
 
 /datum/patron/divine/eora
 	name = "Eora"
@@ -250,8 +328,20 @@
 		"HER BEAUTY IS EVEN IN THIS TORMENT!",
 		"I LOVE YOU, EVEN AS YOU TRESPASS AGAINST ME!",
 	)
+	miracle_healing_lines = list(
+		"A gentle light blossoms around %TARGET!"
+	)
 	traits_tier = list(TRAIT_EORAN_CALM = CLERIC_T0, TRAIT_EORAN_SERENE = CLERIC_T2)
 	storyteller = /datum/storyteller/eora
+
+/datum/patron/divine/eora/situational_bonus(mob/living/follower, mob/living/target)
+	// if the either the target or we are a pacifist, increase bonuses
+	var/situational_bonus = 0
+	if (HAS_TRAIT(target, TRAIT_PACIFISM))
+		situational_bonus = 2.5
+	if (HAS_TRAIT(follower, TRAIT_PACIFISM))
+		situational_bonus += 1.5
+	return list((situational_bonus > 0), situational_bonus)
 
 /////////////////////////////////
 // Does God Hear Your Prayer ? //
