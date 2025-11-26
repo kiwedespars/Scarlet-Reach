@@ -45,7 +45,7 @@
 	if (!H)
 		return
 	var/should_update = FALSE
-	var/list/choices = list("Accessory", "Breasts", "Breast Size", "Dye Gradient", "Dye Gradient Color", "Ears", "Ear Color One", "Ear Color Two", "Eye Color", "Facial Hairstyle", "Facial Hair Color", "Face Detail", "Hairstyle", "Hair Primary Color", "Hair Secondary Gradient Color", "Hair Third Gradient Color", "Horns", "Horn Color", "Penis", "Penis Size", "Tail", "Tail Color One", "Tail Color Two", "Testicles", "Testicle Size", "Vagina", "Wings", "Wing Color")
+	var/list/choices = list("Accessory", "Breast Quantity", "Breast Size", "Ears", "Ear Color One", "Ear Color Two", "Eye Color", "Facial Hairstyle", "Facial Hair Color", "Face Detail", "Hairstyle", "Hair Primary Gradient", "Hair Dye Gradient Color", "Hair Primary Color", "Hair Secondary Gradient Color", "Hair Third Gradient Color", "Horns", "Horn Color", "Penis", "Penis Size", "Tail", "Tail Color One", "Tail Color Two", "Testicles", "Testicle Size", "Vagina", "Wings", "Wing Color")
 	var/chosen = input(H, "Change what?", "Appearance") as null|anything in choices
 
 	if(!chosen)
@@ -229,13 +229,13 @@
 						head.add_bodypart_feature(new_hair)
 						should_update = TRUE
 
-		if("Dye Gradient")
+		if("Hair Primary Gradient")
 			var/datum/customizer_choice/bodypart_feature/hair/head/humanoid/hair_choice = CUSTOMIZER_CHOICE(/datum/customizer_choice/bodypart_feature/hair/head/humanoid)
 			var/list/valid_gradients = list()
 			for(var/gradient_type in GLOB.hair_gradients)
 				valid_gradients[gradient_type] = gradient_type
 
-			var/new_style = input(H, "Choose your dye gradient", "Hair Gradient") as null|anything in valid_gradients
+			var/new_style = input(H, "Choose your dye gradient", "Hair Primary Gradient") as null|anything in valid_gradients
 			if(new_style)
 				var/obj/item/bodypart/head/head = H.get_bodypart(BODY_ZONE_HEAD)
 				if(head && head.bodypart_features)
@@ -420,7 +420,7 @@
 					H.update_body()
 					should_update = TRUE
 
-		if("Breasts")
+		if("Breast Quantity")
 			var/list/valid_breast_types = list("none")
 			for(var/breast_path in subtypesof(/datum/sprite_accessory/breasts))
 				var/datum/sprite_accessory/breasts/breasts = new breast_path()
