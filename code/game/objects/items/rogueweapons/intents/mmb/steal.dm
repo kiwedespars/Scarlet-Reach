@@ -103,5 +103,7 @@
 			if(user != target_human && target_human.stat == CONSCIOUS)
 				user.mind.add_sleep_experience(/datum/skill/misc/stealing, exp_to_gain, FALSE)
 			user.changeNext_move(clickcd)
+		else
+			to_chat(user, span_warning("I lost contact with them!"))
 
 	. = ..()
