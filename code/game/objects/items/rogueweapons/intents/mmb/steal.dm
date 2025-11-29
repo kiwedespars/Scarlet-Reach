@@ -15,7 +15,7 @@
 		var/mob/living/carbon/human/target_human = target
 
 		var/thiefskill = user.get_skill_level(/datum/skill/misc/stealing) + (has_world_trait(/datum/world_trait/matthios_fingers) ? 1 : 0)
-		var/initialstealroll = roll("1d6") + (thiefskill * 2) + (user.STASPD / 3)
+		var/initialstealroll = roll("1d12") + (thiefskill * 2) + (user.STASPD / 3)
 		var/advantageroll = 0
 		var/targetperception = (target_human.STAPER)
 
@@ -24,10 +24,10 @@
 			to_chat(user, span_notice("[target_human] is tense and is more likely to detect me."))
 
 		if(HAS_TRAIT(user, TRAIT_CULTIC_THIEF)) // Matthios blesses his devout with rolling advantage on thieving checks.
-			advantageroll = roll("1d6") + (thiefskill * 2) + (user.STASPD / 3)
+			advantageroll = roll("1d12") + (thiefskill * 2) + (user.STASPD / 3)
 		
 		// Used for showing fail chance.
-		var/chance2steal = max(round(((6 + (thiefskill * 2) + (user.STASPD / 3) - (targetperception)) / 6 ) * 100, 1), 0)
+		var/chance2steal = max(round(((12 + (thiefskill * 2) + (user.STASPD / 3) - (targetperception)) / 12 ) * 100, 1), 0)
 
 		//Mathematically:
 		// SPD stat is to give an initial baseline to lower skilled thieves and reward speedy thieves slightly.
@@ -97,6 +97,9 @@
 							record_featured_stat(FEATURED_STATS_THIEVES, user_human)
 							record_featured_stat(FEATURED_STATS_CRIMINALS, user_human)
 							record_round_statistic(STATS_ITEMS_PICKPOCKETED)
+						if (stealroll < 2 * targetperception && target_human.STAINT > 8)
+							to_chat(target_human, span_warning("Huh? My [picked] is gone!"))
+							to_chat(user, span_warning("The target noticed the missing item."))
 					else
 						exp_to_gain /= 2
 						to_chat(user, span_warning("I didn't find anything there. Perhaps I should look elsewhere."))
