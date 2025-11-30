@@ -39,6 +39,7 @@
 
 	level = 1
 	research_cost = 0
+	vitae_cost = 25
 	check_flags = COVEN_CHECK_LYING | COVEN_CHECK_IMMOBILE
 	toggled = TRUE
 	duration_length = 2 TURNS
@@ -53,7 +54,7 @@
 
 	level = 2
 	research_cost = 1
-	vitae_cost = 55
+	vitae_cost = 30
 	check_flags = COVEN_CHECK_LYING | COVEN_CHECK_IMMOBILE
 	toggled = TRUE
 	duration_length = 2 TURNS
@@ -67,7 +68,7 @@
 
 	level = 3
 	research_cost = 2
-	vitae_cost = 60
+	vitae_cost = 35
 	check_flags = COVEN_CHECK_LYING | COVEN_CHECK_IMMOBILE
 	toggled = TRUE
 	duration_length = 2 TURNS
@@ -81,7 +82,7 @@
 
 	level = 4
 	research_cost = 3
-	vitae_cost = 65
+	vitae_cost = 40
 	check_flags = COVEN_CHECK_LYING | COVEN_CHECK_IMMOBILE
 	toggled = TRUE
 	duration_length = 2 TURNS
@@ -95,7 +96,7 @@
 
 	level = 5
 	research_cost = 4
-	vitae_cost = 70
+	vitae_cost = 45
 	check_flags = COVEN_CHECK_LYING | COVEN_CHECK_IMMOBILE
 	toggled = TRUE
 	duration_length = 2 TURNS
