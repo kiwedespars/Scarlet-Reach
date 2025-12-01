@@ -116,7 +116,7 @@
 				addtimer(cb, (i - 1) * target.total_multiplicative_slowdown())
 			target.emote("scream")
 			target.do_jitter_animation(3 SECONDS)
-			to_chat(target, "<span class='userlove'><b>OH GOD, PLEASE SAVE ME!.</b></span>")
+			to_chat(target, "<span class='userlove'><b>OH GOD, PLEASE SAVE ME!</b></span>")
 			playsound(target,'sound/villain/wonder.ogg', 40)
 
 /datum/coven_power/presence/dread_gaze/deactivate(mob/living/carbon/human/target)
