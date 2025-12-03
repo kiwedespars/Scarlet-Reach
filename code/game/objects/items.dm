@@ -139,6 +139,7 @@ GLOBAL_VAR_INIT(rpg_loot_items, FALSE)
 	var/datum/skill/associated_skill
 
 	var/list/possible_item_intents = list(/datum/intent/use)
+	var/saved_intent_index = 1 // Stores the last selected intent index when item is dropped
 
 	var/bigboy = FALSE //used to center screen_loc when in hand
 	var/wielded = FALSE
@@ -730,6 +731,8 @@ GLOBAL_VAR_INIT(rpg_loot_items, FALSE)
 			var/oldy = pixel_y
 			pixel_y = pixel_y+5
 			animate(src, pixel_y = oldy, time = 0.5)
+			if(istype(loc, /turf/open/water))
+				extinguish()
 	if(altgripped || wielded)
 		ungrip(user, FALSE)
 	item_flags &= ~IN_INVENTORY

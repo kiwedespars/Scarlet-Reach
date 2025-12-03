@@ -126,10 +126,16 @@
 				next_smell = world.time + 30 SECONDS
 				T.pollution.smell_act(src)
 
-/mob/living/proc/handle_inwater(turf/onturf, extinguish = TRUE, force_drown = FALSE)
+/mob/living/proc/handle_inwater(turf/open/water/W, extinguish = TRUE, force_drown = FALSE)
 	if(!extinguish)
 		return
-	extinguish_mob()
+	if(is_floor_hazard_immune())
+		return
+	if(lying || W.water_level == 3)
+		SoakMob(FULL_BODY)
+	else
+		if(W.water_level == 2)
+			SoakMob(BELOW_CHEST)
 
 /mob/living/carbon/handle_inwater(turf/onturf, extinguish = TRUE, force_drown = FALSE)
 	..()

@@ -124,6 +124,7 @@
 		/obj/item/rope/chain = 1,
 		/obj/item/storage/keyring/guardsergeant = 1,
 		/obj/item/rogueweapon/scabbard/sheath = 1,
+		/obj/item/signal_horn = 1,
 	)
 	H.adjust_blindness(-3)
 	//triage fix - loadout is busted, needs fix. See https://github.com/Scarlet-Reach/Scarlet-Reach/issues/1226
@@ -361,7 +362,6 @@
 /obj/effect/proc_holder/spell/invoked/order/focustarget
 	name = "Focus target!"
 	overlay_state = "focustarget"
-
 
 /obj/effect/proc_holder/spell/invoked/order/focustarget/cast(list/targets, mob/living/user)
 	. = ..()

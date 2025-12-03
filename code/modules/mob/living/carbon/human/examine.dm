@@ -117,6 +117,9 @@
 			else
 				. += span_notice("Something about them seems... different.")
 
+		if(HAS_TRAIT(src, TRAIT_DISGRACED_KNIGHT))
+			. += "<span class='big' style='color: #8B4513;'>DISGRACED KNIGHT!</span>"
+
 		if(GLOB.lord_titles[name])
 			. += span_notice("[m3] been granted the title of \"[GLOB.lord_titles[name]]\".")
 
@@ -1047,6 +1050,15 @@
 		inquisition_text = "The Lorde-Inquisitor of the Sect sent here. That's me."	
 
 	return inquisition_text
+
+// Heartfelt examine
+
+/mob/living/proc/get_heartfelt_text(mob/examiner)
+	var/heartfelt_text
+	if(HAS_TRAIT(src, TRAIT_HEARTFELT) && HAS_TRAIT(examiner, TRAIT_HEARTFELT))
+		heartfelt_text = "They serve the interests of Heartfelt."
+
+	return heartfelt_text
 
 /// Returns antagonist-related examine text for the mob, if any. Can return null.
 /mob/living/proc/get_villain_text(mob/examiner)
