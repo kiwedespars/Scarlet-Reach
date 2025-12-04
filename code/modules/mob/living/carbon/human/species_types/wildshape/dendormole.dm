@@ -13,16 +13,17 @@
 /mob/living/carbon/human/species/wildshape/dendormole/gain_inherent_skills()
 	. = ..()
 	if(src.mind)
-		src.adjust_skillrank(/datum/skill/combat/wrestling, 4, TRUE)
-		src.adjust_skillrank(/datum/skill/combat/unarmed, 5, TRUE)
+		src.adjust_skillrank(/datum/skill/combat/wrestling, 3, TRUE) //We don't want this thing wrestling people.
+		src.adjust_skillrank(/datum/skill/combat/unarmed, 4, TRUE)
 		src.adjust_skillrank(/datum/skill/misc/swimming, 2, TRUE)
 		src.adjust_skillrank(/datum/skill/misc/athletics, 3, TRUE)
-		src.adjust_skillrank(/datum/skill/misc/tracking, 4, TRUE) //'Tracker' transformation
+		src.adjust_skillrank(/datum/skill/misc/tracking, 5, TRUE) //'Tracker' transformation
 		src.adjust_skillrank(/datum/skill/misc/sneaking, 3, TRUE) //Stalking
 //Give it miracles maybe as well if needed, but this boi is already good
-		src.STASTR = 20
-		src.STACON = 20
-		src.STAPER = 15
+		src.STASTR = 13
+		src.STACON = 15
+		src.STAEND = 15
+		src.STAPER = 9 //Moles are blind, why did this get good perception?
 		src.STASPD = 13
 
 		AddSpell(new /obj/effect/proc_holder/spell/self/moleclaw)
@@ -39,15 +40,12 @@
 		TRAIT_STRONGBITE,
 		TRAIT_STEELHEARTED,
 		TRAIT_BREADY, //Ambusher
-		TRAIT_ORGAN_EATER,
 		TRAIT_WILD_EATER,
 		TRAIT_HARDDISMEMBER, //Decapping causes them to bug out, badly, and need admin intervention to fix. Bandaid fix.
 		TRAIT_PIERCEIMMUNE, //Prevents weapon dusting and caltrop effects due to them transforming when killed/stepping on shards.
 		TRAIT_LONGSTRIDER,
 		TRAIT_PERFECT_TRACKER,
 		TRAIT_NOPAINSTUN, //This bad boy ENDVRES
-		TRAIT_NIGHT_VISION,
-		TRAIT_NIGHT_OWL,
 		TRAIT_BIGGUY,
 	)
 	inherent_biotypes = MOB_HUMANOID
@@ -123,6 +121,23 @@
 	miss_sound = "bluntswoosh"
 	item_d_type = "slash"
 
+/datum/intent/simple/mole/dig
+	name = "DIG"
+	clickcd = 14
+	damfactor = 1.2
+	swingdelay = 6
+	icon_state = "insmash"
+	blade_class = BCLASS_SMASH
+	attack_verb = list("digs", "excavates", "perforates")
+	animname = "cut"
+	hitsound = list('sound/combat/hits/blunt/metalblunt (1).ogg', 'sound/combat/hits/blunt/metalblunt (2).ogg', 'sound/combat/hits/blunt/metalblunt (3).ogg')
+	penfactor = BLUNT_DEFAULT_PENFACTOR
+	candodge = TRUE
+	canparry = TRUE
+	miss_text = "smashes the air!"
+	miss_sound = "bluntswoosh"
+	item_d_type = "blunt"
+
 /obj/item/rogueweapon/mole_claw //Like a less defense dagger
 	name = "mole claw"
 	desc = ""
@@ -130,12 +145,12 @@
 	lefthand_file = null
 	righthand_file = null
 	icon = 'icons/roguetown/weapons/misc32.dmi'
-	max_blade_int = 600
-	max_integrity = 600
-	force = 30
+	max_blade_int = 300
+	max_integrity = 300
+	force = 25
+	demolition_mod = 2.5 //I'M A MOLE AND I'M DIGGING A HOLE
 	block_chance = 0
-	wdefense = 2
-	blade_dulling = DULLING_SHAFT_WOOD
+	wdefense = 4 //Very long, decent defense (for wildshape).
 	associated_skill = /datum/skill/combat/unarmed
 	wlength = WLENGTH_NORMAL
 	wbalance = WBALANCE_NORMAL
@@ -144,7 +159,7 @@
 	sharpness = IS_SHARP
 	parrysound = "bladedmedium"
 	swingsound = list('sound/vo/mobs/vw/attack (1).ogg','sound/vo/mobs/vw/attack (2).ogg','sound/vo/mobs/vw/attack (3).ogg','sound/vo/mobs/vw/attack (4).ogg')
-	possible_item_intents = list(/datum/intent/simple/mole, /datum/intent/stab, /datum/intent/pick)
+	possible_item_intents = list(/datum/intent/simple/mole, /datum/intent/simple/mole/dig, /datum/intent/pick)
 	parrysound = list('sound/combat/parry/parrygen.ogg')
 	embedding = list("embedded_pain_multiplier" = 0, "embed_chance" = 0, "embedded_fall_chance" = 0)
 	item_flags = DROPDEL
